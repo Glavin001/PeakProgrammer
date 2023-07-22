@@ -2,5 +2,7 @@ seaborn
 matplotlib
 plotly
 nbformat
-jupyterlab=4.0.1
+jupyterlab==4.0.1
 ipykernel==6.23.1
+tqdm
+transformers
