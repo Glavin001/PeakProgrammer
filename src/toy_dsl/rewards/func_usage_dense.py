@@ -57,7 +57,8 @@ def reward_substring_matches_single(text: str, encodings, search: str, max_count
         end = token_range[-1]
 
         # w = 1.0 if range_index < max_count else -1.0
-        w = max_reward if range_index < max_count else -min_reward
+        # w = max_reward if range_index < max_count else -min_reward
+        w = max_reward if range_index < max_count else 0.0
 
         for token_index in range(start, end + 1):
             if start == end:

@@ -1,4 +1,5 @@
 from typing import List, Callable
+import numpy as np
 
 # def calculate_weighted_reward(rewards: List[float], weights: List[float]) -> List[float]:
 def calculate_weighted_reward(rewards: List[List[float]], weights: List[float]) -> List[float]:
@@ -37,7 +38,19 @@ def make_reward_weighted_combo(
             reward_list: List[List[float]] = []
             for rewards in rewards_per_sample:
                 weighted_reward: List[float] = calculate_weighted_reward(rewards, weights)
+
+                # use np to scale weighted_reward from (-1, 1) to (0.0, 1.0)
+                # scaled_weighted_reward: List[float] = np.interp(weighted_reward,
+                #     (-1, 1),
+                #     (0.0, 1.0))
+                # without np
+                # scaled_weighted_reward: List[float] = [(reward + 1) / 2 for reward in weighted_reward]
+                
+                # from (-1, 1) to (-0.5, 1.0) without numpy
+                # scaled_weighted_reward: List[float] = [(reward + 0.5) / 2.5 for reward in weighted_reward]
+
                 reward_list.append(weighted_reward)
+                # reward_list.append(scaled_weighted_reward)
 
             return reward_list
     

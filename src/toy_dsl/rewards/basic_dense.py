@@ -26,7 +26,8 @@ def reward_basic_dense(samples: List[str], prompts: List[str], outputs: List[str
         if interpreted_output == "ERROR":
             # If the code is unparsable, we give it a negative reward.
             # reward_list.append(-1)
-            final_reward = -1
+            # final_reward = -1
+            final_reward = -0.1
         else:
             # if the code is parseable
             if output == interpreted_output:
@@ -36,7 +37,8 @@ def reward_basic_dense(samples: List[str], prompts: List[str], outputs: List[str
             else:
                 # if the output is incorrect, we give it a negative reward.
                 # reward_list.append(-0.5)
-                final_reward = -0.5
+                # final_reward = -0.5
+                final_reward = 0.3
 
         # rewards_per_token: List[float] = [0.0] * len(tokenizer.tokenize(code, add_special_tokens=False))
         num_tokens = len(tokenizer.tokenize(generated, add_special_tokens=False))
