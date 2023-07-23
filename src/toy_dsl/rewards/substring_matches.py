@@ -7,15 +7,32 @@ def find_overlapping_tokens(encodings, char_range):
     # Get the list of tokens and their corresponding start and end positions in the original text
     offsets = encodings.offset_mapping
 
+    # full_text: str = encodings.encodings[0].tokens[1:-1].replace("Ġ", " ")
+    full_text: str = "".join(encodings.encodings[0].tokens[0:-1])
+
+    # from input_ids to tokens
+    # token_texts = [encodings.encodings[0].tokens[token_index] for token_index in range(len(encodings.encodings[0].tokens))]
+
     # Initialize the list to store the token indices
     token_indices = []
 
-    start, end = char_range
+    start, end = char_range # (145, 145)
 
     # Find the tokens that overlap with the given character range
     for token_idx, (token_start, token_end) in enumerate(offsets):
+        # 101:
+        # (144, 145)
+        # 102:
+        # (145, 146)
+        # 103:
+        # (146, 151)
+        # token_text = encodings.tokens[token_idx]
+        token_text = encodings.encodings[0].tokens[token_idx]
+        token_text2 = full_text[token_start:token_end]
+        range_text = full_text[start:end]
+
         # if start < token_end and end > token_start:  # Check for overlap
-        if start < token_end and end > token_start:  # Check for overlap
+        if start <= token_end and end > token_start:  # Check for overlap
             token_indices.append(token_idx)  # Token indices are 0-indexed
 
     return token_indices

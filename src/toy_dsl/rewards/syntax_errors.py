@@ -34,26 +34,38 @@ def penalize_syntax_errors(samples: List[str], prompts: List[str], outputs: List
         try:
             interpreted_output = interpreter.eval(code)
         except Exception as e:
-            # print(e)
-            should_penalize = any([msg in str(e) for msg in MESSAGES])
+            print(e)
+            print(output)
+            # should_penalize = any([msg in str(e) for msg in MESSAGES])
 
-            if not should_penalize:
-                reward_list.append(rewards)
-                continue
+            # if not should_penalize:
+            #     reward_list.append(rewards)
+            #     continue
 
             # print(e.offset)
             # print(code[e.offset - 1])
             # print(code[e.end_offset - 1])
 
-            if not hasattr(e, 'offset'):
-                reward_list.append(rewards)
-                continue
-
-            if hasattr(e, 'end_offset'):
-                match_range = (e.offset - 1, e.end_offset - 1)
+            # check if e is an instance of NameError
+            if isinstance(e, NameError):
+                msg = str(e)
+                # name 'NAME' is not defined
+                # parse out the name
+                name = msg.split("'")[1]
+                # name = e.name
+                print(f"NameError: {name}")
+                # set match_range to the first location of name in code
+                match_range = (code.find(name), code.find(name) + len(name))
             else:
-                print(f"no end_offset for: {e}")
-                match_range = (e.offset - 1, e.offset)
+                if not hasattr(e, 'offset'):
+                    reward_list.append(rewards)
+                    continue
+
+                if hasattr(e, 'end_offset'):
+                    match_range = (max(0, e.offset - 1), max(e.offset, e.end_offset))
+                else:
+                    print(f"no end_offset for: {e}")
+                    match_range = (max(0, e.offset - 1), e.offset)
 
             encodings = tokenizer(output, return_offsets_mapping=True, truncation=True, max_length=max_length)
 
