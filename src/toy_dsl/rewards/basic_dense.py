@@ -10,6 +10,10 @@ def reward_basic_dense(samples: List[str], prompts: List[str], outputs: List[str
     reward_list: List[List[float]] = []
     # for sample in samples:
     for sample, prompt, generated in zip(samples, prompts, outputs):
+        if len(generated) == 0:
+            reward_list.append([])
+            continue
+
         code = sample.split("Function:")[1].strip()
 
         if code.endswith(EOS_TOKEN):

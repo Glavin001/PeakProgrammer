@@ -11,6 +11,10 @@ def make_reward_output_length_diff():
     def reward_length_diff(samples: List[str], prompts: List[str], outputs: List[str], tokenizer, **kwargs) -> List[List[float]]:
         reward_list = []
         for sample, prompt, output in zip(samples, prompts, outputs):
+            if len(output) == 0:
+                reward_list.append([])
+                continue
+
             tokens = tokenizer.tokenize(output, add_special_tokens=False)
 
             parsed_sample = parse_sample(sample)

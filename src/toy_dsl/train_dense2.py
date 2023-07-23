@@ -10,7 +10,7 @@ from lang import Interpreter, list_manip_dsl_gen
 import trlx
 from trlx.data.configs import TRLConfig
 
-from rewards import reward_basic, reward_basic_dense, make_reward_token_cost, make_reward_output_length_diff, reward_func_usage_dense, make_reward_closing_brackets, make_reward_weighted_combo
+from rewards import reward_basic, reward_basic_dense, make_reward_token_cost, make_reward_output_length_diff, reward_func_usage_dense, make_reward_closing_brackets, make_reward_weighted_combo, penalize_syntax_errors
 
 logger = logging.getLogger(__name__)
 
@@ -28,10 +28,18 @@ class DSLDataset:
         if split == "train":
             for datapoint in self.train_data:
                 if "ERROR" not in datapoint["input"]:
-                    yield {"prompt": datapoint["input"], "original_output": datapoint["output"]}
+                    yield {
+                        "prompt": datapoint["input"],
+                        "original_output": datapoint["output"],
+                        "expected": datapoint["output"],
+                    }
         elif split == "test":
             for datapoint in self.test_data:
-                yield {"prompt": datapoint["input"], "original_output": datapoint["output"]}
+                yield {
+                    "prompt": datapoint["input"],
+                    "original_output": datapoint["output"],
+                    "expected": datapoint["output"],
+                }
 
 interpreter = Interpreter()
 
@@ -44,16 +52,26 @@ with config_path.open() as f:
 MAX_LENGTH = 200
 dense_reward_fn = make_reward_weighted_combo([
     reward_basic_dense,
+    # make_reward_token_cost(MAX_LENGTH, 0.5, 0.01),
     make_reward_token_cost(MAX_LENGTH, 0.5, 0.01),
     reward_func_usage_dense,
     make_reward_closing_brackets(max_reward=1.0),
     make_reward_output_length_diff(),
+    penalize_syntax_errors,
 ], [
+    # 1.0,
+    # 0.01,
+    # 0.01,
+    # 0.05,
+    # 0.01,
+    # 0.2,
+
     1.0,
-    0.1,
-    0.3,
-    0.2,
-    0.1,
+    0.01,
+    0.05,
+    0.05,
+    0.01,
+    0.5,
 ])
 
 USE_DENSE = True
@@ -68,8 +86,8 @@ def main(hparams={}):
 
     # Dataset
     dataset = DSLDataset()
-    train_prompts = list(dataset.load_datapoints(split="train"))[:1000]
-    test_prompts = list(dataset.load_datapoints(split="test"))[:20]
+    train_prompts = list(dataset.load_datapoints(split="train"))[:10000]
+    test_prompts = list(dataset.load_datapoints(split="test"))[:100]
 
     trainer = trlx.train(
         reward_fn=reward_fn,

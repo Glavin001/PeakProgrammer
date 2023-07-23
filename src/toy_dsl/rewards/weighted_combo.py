@@ -22,23 +22,30 @@ def make_reward_weighted_combo(
 ):
     def reward_weighted_combo(samples: List[str], prompts: List[str], outputs: List[str], tokenizer, **kwargs) -> List[List[float]]:
 
-        # map over reward_funcs and call each with samples, prompts, outputs, tokenizer, **kwargs
-        # rewards_per_sample = [reward_func(samples, prompts, outputs, tokenizer, **kwargs) for reward_func in reward_funcs]
-        rewards_per_func: List[List[List[float]]] = [reward_func(samples, prompts, outputs, tokenizer, **kwargs) for reward_func in reward_funcs]
+        # try:
+            # map over reward_funcs and call each with samples, prompts, outputs, tokenizer, **kwargs
+            # rewards_per_sample = [reward_func(samples, prompts, outputs, tokenizer, **kwargs) for reward_func in reward_funcs]
+            rewards_per_func: List[List[List[float]]] = [reward_func(samples, prompts, outputs, tokenizer, **kwargs) for reward_func in reward_funcs]
 
-        rewards_per_sample: List[List[List[float]]] = []
-        for sample_index in range(len(samples)):
-            rewards_per_func_per_sample: List[List[float]] = []
-            for reward_func_index in range(len(reward_funcs)):
-                rewards_per_func_per_sample.append(rewards_per_func[reward_func_index][sample_index])
-            rewards_per_sample.append(rewards_per_func_per_sample)
+            rewards_per_sample: List[List[List[float]]] = []
+            for sample_index in range(len(samples)):
+                rewards_per_func_per_sample: List[List[float]] = []
+                for reward_func_index in range(len(reward_funcs)):
+                    rewards_per_func_per_sample.append(rewards_per_func[reward_func_index][sample_index])
+                rewards_per_sample.append(rewards_per_func_per_sample)
 
-        reward_list: List[List[float]] = []
-        for rewards in rewards_per_sample:
-            weighted_reward: List[float] = calculate_weighted_reward(rewards, weights)
-            reward_list.append(weighted_reward)
+            reward_list: List[List[float]] = []
+            for rewards in rewards_per_sample:
+                weighted_reward: List[float] = calculate_weighted_reward(rewards, weights)
+                reward_list.append(weighted_reward)
 
-        return reward_list
+            return reward_list
+    
+        # except Exception as e:
+        #     print(f"Error in reward_weighted_combo:")
+        #     print(e)
+        #     # return [[0.0] * len(output) for output in outputs]
+        #     tokens = 
 
         # last_token_reward = np.interp(weighted_reward,
         #             (-1, 1),

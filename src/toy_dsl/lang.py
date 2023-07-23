@@ -105,8 +105,11 @@ class Interpreter:
             else:
                 return "ERROR"
         except Exception as e:
-            # print(e)
+            print(e)
             return "ERROR"
+    
+    def eval(self, statement_string: str):
+        return eval(statement_string)  # Adding an exception to unparsable strings
 
 
 interpreter = Interpreter()

@@ -7,6 +7,7 @@ from .substring_matches import make_reward_substring_matches
 from .func_usage_dense import reward_func_usage_dense
 from .closing_brackets import make_reward_closing_brackets
 from .weighted_combo import make_reward_weighted_combo
+from .syntax_errors import penalize_syntax_errors
 
 __all__ = [
     "reward_basic",
@@ -18,4 +19,5 @@ __all__ = [
     "reward_func_usage_dense",
     "make_reward_closing_brackets",
     "make_reward_weighted_combo",
+    "penalize_syntax_errors",
 ]

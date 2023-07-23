@@ -10,6 +10,10 @@ def make_reward_closing_brackets(max_reward: float = 1.0):
     def reward_closing_brackets(samples: List[str], prompts: List[str], outputs: List[str], tokenizer, **kwargs) -> List[List[float]]:
         reward_list = []
         for sample, prompt, output in zip(samples, prompts, outputs):
+            if len(output) == 0:
+                reward_list.append([])
+                continue
+
             tokens = tokenizer.tokenize(output, add_special_tokens=False)
 
             reward = reward_closing_brackets_single(tokens, max_reward=max_reward)

@@ -47,6 +47,7 @@ def reward_substring_matches_single(text: str, encodings, searches: List[str], m
         # all_token_indices += [overlapping_range[-1]]
         all_token_ranges.append(overlapping_range)
     rewards = [0.0] * len(encodings['input_ids'])
+
     # for token_index in all_token_indices:
     #     rewards[token_index] = max_reward
 

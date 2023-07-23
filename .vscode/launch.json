@@ -1,0 +1,16 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "toy_dsl: train_dense2",
+            "type": "python",
+            "request": "launch",
+            "module": "train_dense2",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/src/toy_dsl/"
+        }
+    ]
+}

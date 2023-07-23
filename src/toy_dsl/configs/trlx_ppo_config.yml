@@ -5,11 +5,13 @@ train:
   # epochs: 30
   epochs: 30
   total_steps: 80000
-  batch_size: 8
+  # batch_size: 8
+  batch_size: 40
 
   checkpoint_interval: 1000000
   # eval_interval: 16
-  eval_interval: 5
+  # eval_interval: 5
+  eval_interval: 10
 
   pipeline: "PromptPipeline"
   trainer: "AcceleratePPOTrainer"
