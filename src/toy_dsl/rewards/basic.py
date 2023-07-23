@@ -8,8 +8,8 @@ interpreter = Interpreter()
 
 EOS_TOKEN = "<|endoftext|>"
 
-def reward_basic(samples: List[str], prompts: List[str], outputs: List[str], tokenizer, **kwargs) -> List[List[float]]:
-    reward_list = []
+def reward_basic(samples: List[str], prompts: List[str], outputs: List[str], tokenizer, **kwargs) -> List[float]:
+    reward_list: List[float] = []
     for sample in samples:
         code = sample.split("Function:")[1].strip()
 

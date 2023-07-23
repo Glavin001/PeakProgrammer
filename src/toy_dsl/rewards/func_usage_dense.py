@@ -1,8 +1,8 @@
 from typing import List
+from utils import parse_sample
 
 from .substring_matches import make_reward_substring_matches
 from .func_usage import all_func_names, count_used_func_names
-from utils import parse_sample
 
 def reward_func_usage_dense(samples: List[str], prompts: List[str], outputs: List[str], tokenizer, **kwargs) -> List[List[float]]:
     """

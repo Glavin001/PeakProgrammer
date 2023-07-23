@@ -104,8 +104,7 @@ class Interpreter:
                 return res
             else:
                 return "ERROR"
-        except:
-            # except Exception as e:
+        except Exception as e:
             # print(e)
             return "ERROR"
 
